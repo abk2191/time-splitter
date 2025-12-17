@@ -13,6 +13,40 @@ function App() {
     localStorage.setItem("splitTimes", JSON.stringify(timee));
   }, [timee]);
 
+  // Function to calculate percentage of day passed
+  // Function to calculate percentage of day passed
+  function getDayPercentage(rawTime = null) {
+    let hours, minutes, seconds;
+
+    if (rawTime) {
+      // If rawTime is provided, parse it (it's in "HH:MM:SS" format)
+      [hours, minutes, seconds] = rawTime.split(":").map(Number);
+    } else {
+      // Otherwise, use current time
+      const now = new Date();
+      hours = now.getHours();
+      minutes = now.getMinutes();
+      seconds = now.getSeconds();
+    }
+
+    // Calculate total seconds passed today
+    const totalSecondsPassed = hours * 3600 + minutes * 60 + seconds;
+
+    // Total seconds in a day
+    const totalSecondsInDay = 24 * 60 * 60;
+
+    // Calculate percentage
+    const percentage = (totalSecondsPassed / totalSecondsInDay) * 100;
+
+    return {
+      percentage: percentage.toFixed(2),
+      formatted: `${percentage.toFixed(2)}%`,
+      time: `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`,
+    };
+  }
+
   function getTime() {
     const now = new Date();
     const hours = now.getHours();
@@ -63,9 +97,19 @@ function App() {
     // Format the result
     return (
       <>
-        <span style={{ color: "yellow" }}>
+        <span
+          style={{
+            color: "white",
+            fontSize: "14px",
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <i class="fa-solid fa-circle-info"></i>
           {diffHours} hours {diffMinutes} minutes {diffSeconds} seconds till
-          midnight
+          midnight 🌙
         </span>
       </>
     );
@@ -79,10 +123,78 @@ function App() {
     setTimee([]);
   }
 
+  function displayDate() {
+    const date = new Date();
+    const options = {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    };
+
+    // Split the formatted date
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    const parts = formattedDate.split(", ");
+
+    // Reorder: "December 17, 2025, Wednesday"
+    const reordered = `${parts[1]} ${parts[2]}, ${parts[0]}`;
+
+    return <p className="date">{reordered}</p>;
+  }
+
+  // Reverse the array using filter() - create a new reversed array
+  const reversedTimee = timee.filter((item, index, array) => true).reverse();
+
+  // Get current day percentage
+  const dayProgress = getDayPercentage();
+
   return (
     <>
       <div className="time-container">
         <LiveClock />
+        {displayDate()}
+
+        {/* Day Progress Display
+        <div
+          style={{
+            margin: "15px 0",
+            padding: "15px",
+            background: "rgba(255, 255, 255, 0.1)",
+            borderRadius: "10px",
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              color: "white",
+              fontSize: "16px",
+              marginBottom: "5px",
+            }}
+          >
+            Day Progress: {dayProgress.formatted}
+          </p>
+
+          <div
+            style={{
+              width: "100%",
+              height: "10px",
+              backgroundColor: "rgba(255, 255, 255, 0.2)",
+              borderRadius: "5px",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                width: `${dayProgress.percentage}%`,
+                height: "100%",
+                background: "linear-gradient(90deg, #4CAF50, #8BC34A)",
+                transition: "width 0.3s ease",
+                borderRadius: "5px",
+              }}
+            />
+          </div>
+        </div> */}
+
         <button onClick={getTime}>
           <span className="shadow"></span>
           <span className="edge"></span>
@@ -90,17 +202,83 @@ function App() {
         </button>
 
         <button className="delete-button" onClick={clearLocalStorage}>
-          <i class="fa-regular fa-trash-can"></i>
+          <i className="fa-regular fa-trash-can"></i>
         </button>
 
-        {timee.map((timeObj, index) => (
-          <div key={timeObj.timestamp} className="time-div">
-            <p className="thime" style={{ fontSize: "25px" }}>
-              Split-{index + 1}: {timeObj.displayTime}
-            </p>
-            <p style={{ fontSize: "20px" }}>{tillMidnight(timeObj.rawTime)}</p>
-          </div>
-        ))}
+        {reversedTimee.map((timeObj, index) => {
+          // Calculate day progress for THIS specific split time
+          const splitDayProgress = getDayPercentage(timeObj.rawTime);
+
+          return (
+            <div key={timeObj.timestamp} className="time-div">
+              <p className="thime" style={{ fontSize: "25px" }}>
+                <span
+                  style={{
+                    color: "red",
+                    textShadow: "0 0 5px red, 0 0 10px red, 0 0 15px red",
+                  }}
+                >
+                  Split-{reversedTimee.length - index}:
+                </span>{" "}
+                <span
+                  style={{
+                    color: "white",
+                    textShadow: "0 0 5px white, 0 0 10px white, 0 0 15px white",
+                  }}
+                >
+                  {timeObj.displayTime}
+                </span>
+              </p>
+              <p style={{ fontSize: "20px" }}>
+                {tillMidnight(timeObj.rawTime)}
+              </p>
+              {/* Day Progress Display - using splitDayProgress instead of dayProgress */}
+              <div
+                style={{
+                  margin: "15px 0",
+                  padding: "15px",
+                  background: "#1a1a1a",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                }}
+              >
+                <p
+                  style={{
+                    color: "white",
+                    fontSize: "16px",
+                    marginBottom: "10px",
+                    textAlign: "left",
+                  }}
+                >
+                  Day Progress: {splitDayProgress.formatted}
+                </p>
+
+                {/* Progress Bar */}
+                <div
+                  style={{
+                    width: "100%",
+                    height: "10px",
+                    backgroundColor: "rgba(255, 255, 255, 0.2)",
+                    borderRadius: "5px",
+                    border: "1px solid grey",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${splitDayProgress.percentage}%`,
+                      height: "100%",
+                      background:
+                        "linear-gradient(90deg, #252725ff, #060606ff)",
+                      transition: "width 0.3s ease",
+                      borderRadius: "5px",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
 
         {timee.length === 0 && (
           <div
