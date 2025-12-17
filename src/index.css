@@ -17,6 +17,10 @@
   background-clip: text;
 }
 
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .date {
   background: linear-gradient(45deg, #00ffff, #0066ff, #3300ff);
   -webkit-background-clip: text;
