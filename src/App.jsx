@@ -96,7 +96,7 @@ function App() {
         {timee.map((timeObj, index) => (
           <div key={timeObj.timestamp} className="time-div">
             <p className="thime" style={{ fontSize: "25px" }}>
-              {timeObj.displayTime}
+              Split-{index + 1}: {timeObj.displayTime}
             </p>
             <p style={{ fontSize: "20px" }}>{tillMidnight(timeObj.rawTime)}</p>
           </div>
