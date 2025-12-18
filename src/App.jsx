@@ -14,7 +14,6 @@ function App() {
   }, [timee]);
 
   // Function to calculate percentage of day passed
-  // Function to calculate percentage of day passed
   function getDayPercentage(rawTime = null) {
     let hours, minutes, seconds;
 
@@ -67,8 +66,17 @@ function App() {
         displayTime: timeString, // For display with AM/PM
         rawTime: rawTimeForCalc, // For midnight calculation (24h format)
         timestamp: now.getTime(), // Unique ID
+        note: "", // Initialize empty note for this time entry
       },
     ]);
+  }
+
+  function handleNoteChange(timestamp, newNote) {
+    setTimee((prevTime) =>
+      prevTime.map((item) =>
+        item.timestamp === timestamp ? { ...item, note: newNote } : item
+      )
+    );
   }
 
   function tillMidnight(rawTime) {
@@ -154,47 +162,6 @@ function App() {
         <LiveClock />
         {displayDate()}
 
-        {/* Day Progress Display
-        <div
-          style={{
-            margin: "15px 0",
-            padding: "15px",
-            background: "rgba(255, 255, 255, 0.1)",
-            borderRadius: "10px",
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              color: "white",
-              fontSize: "16px",
-              marginBottom: "5px",
-            }}
-          >
-            Day Progress: {dayProgress.formatted}
-          </p>
-
-          <div
-            style={{
-              width: "100%",
-              height: "10px",
-              backgroundColor: "rgba(255, 255, 255, 0.2)",
-              borderRadius: "5px",
-              overflow: "hidden",
-            }}
-          >
-            <div
-              style={{
-                width: `${dayProgress.percentage}%`,
-                height: "100%",
-                background: "linear-gradient(90deg, #4CAF50, #8BC34A)",
-                transition: "width 0.3s ease",
-                borderRadius: "5px",
-              }}
-            />
-          </div>
-        </div> */}
-
         <button onClick={getTime}>
           <span className="shadow"></span>
           <span className="edge"></span>
@@ -275,6 +242,35 @@ function App() {
                     }}
                   />
                 </div>
+
+                {/* Content Editable Note */}
+                <p
+                  contentEditable
+                  suppressContentEditableWarning
+                  style={{
+                    color: "white",
+                    fontSize: "16px",
+                    marginTop: "15px",
+                    padding: "10px",
+                    background: "rgba(255, 255, 255, 0.1)",
+                    borderRadius: "5px",
+                    minHeight: "40px",
+                    outline: "none",
+                    textAlign: "left",
+                    border: "1px solid rgba(255, 255, 255, 0.2)",
+                  }}
+                  onBlur={(e) =>
+                    handleNoteChange(timeObj.timestamp, e.target.textContent)
+                  }
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      e.target.blur();
+                    }
+                  }}
+                >
+                  {timeObj.note || "Click to add notes..."}
+                </p>
               </div>
             </div>
           );
