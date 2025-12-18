@@ -196,7 +196,7 @@ function App() {
                   {timeObj.displayTime}
                 </span>
               </p>
-              <p style={{ fontSize: "20px" }}>
+              <p style={{ fontSize: "20px", marginTop: "15px" }}>
                 {tillMidnight(timeObj.rawTime)}
               </p>
               {/* Day Progress Display - using splitDayProgress instead of dayProgress */}
