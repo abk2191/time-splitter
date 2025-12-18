@@ -159,8 +159,11 @@ function App() {
   return (
     <>
       <div className="time-container">
-        <LiveClock />
-        {displayDate()}
+        <div className="time-and-day-container">
+          <p className="today">TODAY</p>
+          <LiveClock />
+          {displayDate()}
+        </div>
 
         <button onClick={getTime}>
           <span className="shadow"></span>

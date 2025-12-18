@@ -8,11 +8,31 @@
 }
 
 .clock {
-  font-size: 45px;
+  font-size: 25px;
   font-family: "Inter", sans-serif;
   font-weight: bolder;
-  color: #1a1a1a;
-  text-shadow: 0 0 10px #1a1a1a, 0 0 20px rgba(255, 255, 255, 0.5);
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.today {
+  font-size: 25px;
+  font-family: "Inter", sans-serif;
+  font-weight: bolder;
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+.time-and-day-container {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #1a1a1a;
+  border-radius: 10px;
+  background-color: #1a1a1a;
+  padding: 45px;
 }
 
 * {
@@ -20,9 +40,9 @@
 }
 
 .date {
-  color: #1a1a1a;
-  text-shadow: 0 0 10px #1a1a1a, 0 0 20px rgba(255, 255, 255, 0.5);
-  font-size: 25px;
+  color: white;
+  text-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5);
+  font-size: 20px;
   font-weight: bold;
 }
 
