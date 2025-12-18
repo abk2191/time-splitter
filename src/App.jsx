@@ -107,7 +107,7 @@ function App() {
       <>
         <span
           style={{
-            color: "white",
+            color: "yellow",
             fontSize: "14px",
             display: "flex",
             gap: "10px",
@@ -199,7 +199,9 @@ function App() {
                   {timeObj.displayTime}
                 </span>
               </p>
-              <p style={{ fontSize: "20px", marginTop: "15px" }}>
+              <p
+                style={{ fontSize: "20px", marginTop: "15px", color: "yellow" }}
+              >
                 {tillMidnight(timeObj.rawTime)}
               </p>
               {/* Day Progress Display - using splitDayProgress instead of dayProgress */}
@@ -214,7 +216,8 @@ function App() {
               >
                 <p
                   style={{
-                    color: "white",
+                    color: "neon",
+
                     fontSize: "16px",
                     marginBottom: "10px",
                     textAlign: "left",
