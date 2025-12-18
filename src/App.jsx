@@ -216,7 +216,7 @@ function App() {
               >
                 <p
                   style={{
-                    color: "neon",
+                    color: "skyblue",
 
                     fontSize: "16px",
                     marginBottom: "10px",
