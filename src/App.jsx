@@ -8,6 +8,8 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [isEvening, setIsEvening] = useState("null");
+
   // Save to localStorage whenever timee changes
   useEffect(() => {
     localStorage.setItem("splitTimes", JSON.stringify(timee));
@@ -150,6 +152,24 @@ function App() {
     return <p className="date">{reordered}</p>;
   }
 
+  function getIsEvening() {
+    const now = new Date();
+    const currentHour = now.getHours();
+
+    const isNightTime = currentHour >= 18 || currentHour < 4;
+    setIsEvening(isNightTime);
+  }
+
+  useEffect(() => {
+    // Check immediately
+    getIsEvening();
+
+    // Set up interval to check every minute (optional)
+    const interval = setInterval(getIsEvening, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   // Reverse the array using filter() - create a new reversed array
   const reversedTimee = timee.filter((item, index, array) => true).reverse();
 
@@ -162,6 +182,7 @@ function App() {
         <div className="time-and-day-container">
           <p className="today">TODAY</p>
           <LiveClock />
+          <div className="sun-or-moon">{isEvening ? <p>🌙</p> : <p>☀️</p>}</div>
           {displayDate()}
         </div>
 
