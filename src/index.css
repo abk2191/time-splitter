@@ -248,6 +248,10 @@ button:focus:not(:focus-visible) {
 
 @media (max-width: 768px) {
   .time-div {
-    width: 90%;
+    width: 80%;
+  }
+
+  .time-and-day-container {
+    width: 70%;
   }
 }

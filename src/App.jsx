@@ -123,7 +123,7 @@ function App() {
         >
           <i class="fa-solid fa-circle-info"></i>
           {diffHours} hours {diffMinutes} minutes {diffSeconds} seconds till
-          midnight 🌙
+          midnight
         </span>
       </>
     );
