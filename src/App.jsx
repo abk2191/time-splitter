@@ -238,7 +238,7 @@ function App() {
                 <span
                   style={{
                     color: "red",
-                    textShadow: "0 0 5px red, 0 0 10px red, 0 0 15px red",
+                    // textShadow: "0 0 5px red, 0 0 10px red, 0 0 15px red",
                   }}
                 >
                   Split-{reversedTimee.length - index}:
@@ -262,15 +262,16 @@ function App() {
                 style={{
                   margin: "15px 0",
                   padding: "15px",
-                  background: "#1a1a1a",
+
                   borderRadius: "10px",
                   textAlign: "center",
                 }}
               >
                 <p
                   style={{
-                    color: "skyblue",
-
+                    color: "green",
+                    textShadow:
+                      "0 0 5px green, 0 0 10px greenyellow, 0 0 15px greenyellow",
                     fontSize: "16px",
                     marginBottom: "10px",
                     textAlign: "left",
@@ -295,7 +296,7 @@ function App() {
                       width: `${splitDayProgress.percentage}%`,
                       height: "100%",
                       background:
-                        "linear-gradient(90deg, #252725ff, #060606ff)",
+                        "linear-gradient(90deg, #4c32c1ff, #3c23abff)",
                       transition: "width 0.3s ease",
                       borderRadius: "5px",
                     }}
