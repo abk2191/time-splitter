@@ -8,7 +8,11 @@ function App() {
     return saved ? JSON.parse(saved) : [];
   });
 
-  const [isEvening, setIsEvening] = useState("null");
+  const [isEvening, setIsEvening] = useState(null);
+  const [bgColor, setBgColor] = useState(() => {
+    const savedColor = localStorage.getItem("appBgColor");
+    return savedColor || "#ffffff"; // Default white
+  });
 
   // Save to localStorage whenever timee changes
   useEffect(() => {
@@ -160,6 +164,26 @@ function App() {
     setIsEvening(isNightTime);
   }
 
+  function changeBackgroundColor(colorVal) {
+    // 1. Update React state
+    setBgColor(colorVal);
+
+    // 2. Update DOM immediately
+    document.body.style.backgroundColor = colorVal;
+    document.body.style.transition = "background-color 0.3s ease";
+
+    // 3. Save to localStorage
+    localStorage.setItem("appBgColor", colorVal);
+  }
+
+  useEffect(() => {
+    const savedColor = localStorage.getItem("appBgColor");
+    if (savedColor) {
+      document.body.style.backgroundColor = savedColor;
+      // Don't need setBgColor here because it's already set in useState initializer
+    }
+  }, []);
+
   useEffect(() => {
     // Check immediately
     getIsEvening();
@@ -179,6 +203,14 @@ function App() {
   return (
     <>
       <div className="time-container">
+        <div>
+          <input
+            type="color"
+            className="color-picker"
+            value={bgColor}
+            onChange={(e) => changeBackgroundColor(e.target.value)}
+          />
+        </div>
         <div className="time-and-day-container">
           <p className="today">TODAY</p>
           <LiveClock />

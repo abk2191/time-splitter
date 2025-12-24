@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
   gap: 40px;
-  margin-top: 30px;
+  /* margin-top: 30px; */
 }
 
 .clock {
@@ -76,6 +76,8 @@ body,
 html {
   font-family: "Inter", sans-serif;
   background-color: whitesmoke;
+  margin: 0;
+  padding: 0%;
 }
 
 /* From Uiverse.io by cssbuttons-io */
@@ -159,6 +161,36 @@ button:active .shadow {
 
 button:focus:not(:focus-visible) {
   outline: none;
+}
+
+.color-picker {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 3px solid #ddd;
+  cursor: pointer;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  margin-top: 30px;
+}
+
+.color-picker::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.color-picker::-webkit-color-swatch {
+  border: none;
+  border-radius: 50%;
+}
+
+.color-picker::-moz-color-swatch {
+  border: none;
+  border-radius: 50%;
 }
 
 @media (max-width: 768px) {
