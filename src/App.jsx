@@ -237,7 +237,7 @@ function App() {
               <p className="thime" style={{ fontSize: "25px" }}>
                 <span
                   style={{
-                    color: "red",
+                    color: "white",
                     // textShadow: "0 0 5px red, 0 0 10px red, 0 0 15px red",
                   }}
                 >
