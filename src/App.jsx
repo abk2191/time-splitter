@@ -151,7 +151,7 @@ function App() {
     const parts = formattedDate.split(", ");
 
     // Reorder: "December 17, 2025, Wednesday"
-    const reordered = `${parts[1]} ${parts[2]}, ${parts[0]}`;
+    const reordered = `${parts[1]} ${parts[2]} ${parts[0]}`;
 
     return <p className="date">{reordered}</p>;
   }
