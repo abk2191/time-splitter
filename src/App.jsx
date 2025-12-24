@@ -269,9 +269,8 @@ function App() {
               >
                 <p
                   style={{
-                    color: "green",
-                    textShadow:
-                      "0 0 5px green, 0 0 10px greenyellow, 0 0 15px greenyellow",
+                    color: "white",
+                    textShadow: "0 0 5px white, 0 0 10px white, 0 0 15px white",
                     fontSize: "16px",
                     marginBottom: "10px",
                     textAlign: "left",
@@ -287,7 +286,7 @@ function App() {
                     height: "10px",
                     backgroundColor: "rgba(255, 255, 255, 0.2)",
                     borderRadius: "5px",
-                    border: "1px solid grey",
+                    // border: "1px solid grey",
                     overflow: "hidden",
                   }}
                 >
