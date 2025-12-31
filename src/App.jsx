@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import LiveClock from "./Liveclock";
+import CalculateAge from "./AgeCalculator";
 
 function App() {
   // Initialize state from localStorage
@@ -216,6 +217,7 @@ function App() {
           <LiveClock />
           <div className="sun-or-moon">{isEvening ? <p>🌙</p> : <p>☀️</p>}</div>
           {displayDate()}
+          <CalculateAge />
         </div>
 
         <button onClick={getTime}>

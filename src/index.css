@@ -249,6 +249,11 @@ button:focus:not(:focus-visible) {
   border-radius: 50%;
 }
 
+.age-p {
+  text-shadow: 0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5);
+  margin-top: 4px;
+}
+
 @media (max-width: 768px) {
   .time-div {
     width: 80%;
