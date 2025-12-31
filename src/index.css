@@ -97,6 +97,8 @@ p {
 
   /* Smooth transitions */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: tada; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 0.5s; /* don't forget to set a duration! */
 }
 
 .time-div::before {
