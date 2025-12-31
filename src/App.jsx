@@ -221,7 +221,9 @@ function App() {
         <button onClick={getTime}>
           <span className="shadow"></span>
           <span className="edge"></span>
-          <span className="front text">SPLIT</span>
+          <span className="front text">
+            <i class="fa-solid fa-bolt"></i> SPLIT
+          </span>
         </button>
 
         <button className="delete-button" onClick={clearLocalStorage}>
