@@ -20,6 +20,26 @@ function App() {
     localStorage.setItem("splitTimes", JSON.stringify(timee));
   }, [timee]);
 
+  // Function to calculate time ago
+  function getTimeAgo(timestamp) {
+    const now = new Date().getTime();
+    const diffMs = now - timestamp;
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`;
+    } else {
+      return "Just now";
+    }
+  }
+
   // Function to calculate percentage of day passed
   function getDayPercentage(rawTime = null) {
     let hours, minutes, seconds;
@@ -235,6 +255,8 @@ function App() {
         {reversedTimee.map((timeObj, index) => {
           // Calculate day progress for THIS specific split time
           const splitDayProgress = getDayPercentage(timeObj.rawTime);
+          // Calculate time ago for this split
+          const timeAgo = getTimeAgo(timeObj.timestamp);
 
           return (
             <div key={timeObj.timestamp} className="time-div">
@@ -256,6 +278,20 @@ function App() {
                   {timeObj.displayTime}
                 </span>
               </p>
+              
+              {/* Time ago display - Added here */}
+              <p
+                style={{
+                  fontSize: "16px",
+                  marginTop: "5px",
+                  color: "#a0aec0",
+                  fontStyle: "italic",
+                  textAlign: "center",
+                }}
+              >
+                {timeAgo}
+              </p>
+              
               <p
                 style={{ fontSize: "20px", marginTop: "15px", color: "yellow" }}
               >
@@ -266,7 +302,6 @@ function App() {
                 style={{
                   margin: "15px 0",
                   padding: "15px",
-
                   borderRadius: "10px",
                   textAlign: "center",
                 }}
@@ -290,7 +325,6 @@ function App() {
                     height: "10px",
                     backgroundColor: "rgba(255, 255, 255, 0.2)",
                     borderRadius: "5px",
-                    // border: "1px solid grey",
                     overflow: "hidden",
                   }}
                 >
