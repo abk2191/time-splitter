@@ -282,10 +282,9 @@ function App() {
               {/* Time ago display - Added here */}
               <p
                 style={{
-                  fontSize: "16px",
+                  fontSize: "14px",
                   marginTop: "5px",
-                  color: "#a0aec0",
-                  fontStyle: "italic",
+                  color: "white",
                   textAlign: "center",
                 }}
               >
