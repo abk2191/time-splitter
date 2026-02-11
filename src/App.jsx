@@ -233,7 +233,7 @@ function App() {
           />
         </div>
         <div className="time-and-day-container">
-          <p className="today">TODAY</p>
+          <p className="today">JUST FOR TODAY</p>
           <LiveClock />
           <div className="sun-or-moon">{isEvening ? <p>🌙</p> : <p>☀️</p>}</div>
           {displayDate()}
