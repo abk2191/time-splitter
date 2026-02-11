@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: "autoUpdate",
       injectRegister: "auto", // auto-injects the SW register script
       manifest: {
-        name: "Time Splitter",
-        short_name: "Time Splitter",
+        name: "Just For Today",
+        short_name: "Just For Today",
         start_url: ".", // see Step 7 for GitHub Pages
         scope: ".", // see Step 7 for GitHub Pages
         display: "fullscreen", // removes browser UI/URL bar when installed
