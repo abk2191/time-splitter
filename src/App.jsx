@@ -272,7 +272,6 @@ function App() {
                 <span
                   style={{
                     color: "white",
-                    textShadow: "0 0 5px white, 0 0 10px white, 0 0 15px white",
                   }}
                 >
                   {timeObj.displayTime}
