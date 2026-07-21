@@ -12,8 +12,11 @@ function App() {
   const [isEvening, setIsEvening] = useState(null);
   const [bgColor, setBgColor] = useState(() => {
     const savedColor = localStorage.getItem("appBgColor");
-    return savedColor || "#ffffff"; // Default white
+    return savedColor || "#ffffff";
   });
+
+  // Add state for live counters
+  const [liveCounters, setLiveCounters] = useState({});
 
   // Save to localStorage whenever timee changes
   useEffect(() => {
@@ -45,23 +48,16 @@ function App() {
     let hours, minutes, seconds;
 
     if (rawTime) {
-      // If rawTime is provided, parse it (it's in "HH:MM:SS" format)
       [hours, minutes, seconds] = rawTime.split(":").map(Number);
     } else {
-      // Otherwise, use current time
       const now = new Date();
       hours = now.getHours();
       minutes = now.getMinutes();
       seconds = now.getSeconds();
     }
 
-    // Calculate total seconds passed today
     const totalSecondsPassed = hours * 3600 + minutes * 60 + seconds;
-
-    // Total seconds in a day
     const totalSecondsInDay = 24 * 60 * 60;
-
-    // Calculate percentage
     const percentage = (totalSecondsPassed / totalSecondsInDay) * 100;
 
     return {
@@ -73,40 +69,8 @@ function App() {
     };
   }
 
-  function getTime() {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-
-    // Convert to 12-hour format
-    const ampm = hours >= 12 ? "PM" : "AM";
-    const twelveHour = hours % 12 || 12; // Convert 0 to 12 for 12 AM
-
-    // Store both 12-hour format with AM/PM and the raw time for calculations
-    const timeString = `${twelveHour}:${minutes}:${seconds} ${ampm}`;
-    const rawTimeForCalc = `${hours}:${minutes}:${seconds}`; // 24-hour format for midnight calculation
-
-    setTimee((prevTime) => [
-      ...prevTime,
-      {
-        displayTime: timeString, // For display with AM/PM
-        rawTime: rawTimeForCalc, // For midnight calculation (24h format)
-        timestamp: now.getTime(), // Unique ID
-        note: "", // Initialize empty note for this time entry
-      },
-    ]);
-  }
-
-  function handleNoteChange(timestamp, newNote) {
-    setTimee((prevTime) =>
-      prevTime.map((item) =>
-        item.timestamp === timestamp ? { ...item, note: newNote } : item
-      )
-    );
-  }
-
-  function tillMidnight(rawTime) {
+  // Updated function to calculate remaining time until midnight
+  function getRemainingTime(rawTime) {
     // Parse the input time (24-hour format)
     const [hours, minutes, seconds] = rawTime.split(":").map(Number);
 
@@ -117,9 +81,9 @@ function App() {
     const totalSecondsInDay = 24 * 60 * 60;
 
     // Remaining seconds until midnight
-    const remainingSeconds = totalSecondsInDay - inputTotalSeconds;
+    let remainingSeconds = totalSecondsInDay - inputTotalSeconds;
 
-    // If it's exactly midnight
+    // If it's exactly midnight or past
     if (remainingSeconds <= 0) {
       return "It's midnight!";
     }
@@ -129,33 +93,70 @@ function App() {
     const diffMinutes = Math.floor((remainingSeconds % 3600) / 60);
     const diffSeconds = remainingSeconds % 60;
 
-    // Format the result
-    return (
-      <>
-        <span
-          style={{
-            color: "yellow",
-            fontSize: "14px",
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <i class="fa-solid fa-circle-info"></i>
-          {diffHours} hours {diffMinutes} minutes {diffSeconds} seconds till
-          midnight
-        </span>
-      </>
+    return `${diffHours} hours ${diffMinutes} minutes ${diffSeconds} seconds till midnight`;
+  }
+
+  // Function to update live counters
+  function updateLiveCounters() {
+    const newCounters = {};
+    const now = new Date();
+    const currentTime = `${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
+    
+    // Only update the latest split (first in reversed array or last in original)
+    if (timee.length > 0) {
+      const latestTime = timee[timee.length - 1];
+      newCounters[latestTime.timestamp] = getRemainingTime(currentTime);
+    }
+    
+    setLiveCounters(newCounters);
+  }
+
+  // Update live counters every second
+  useEffect(() => {
+    // Initial update
+    updateLiveCounters();
+    
+    const interval = setInterval(updateLiveCounters, 1000);
+    
+    return () => clearInterval(interval);
+  }, [timee]); // Re-run when timee changes
+
+  function getTime() {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const seconds = String(now.getSeconds()).padStart(2, "0");
+
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const twelveHour = hours % 12 || 12;
+
+    const timeString = `${twelveHour}:${minutes}:${seconds} ${ampm}`;
+    const rawTimeForCalc = `${hours}:${minutes}:${seconds}`;
+
+    const newTimeObj = {
+      displayTime: timeString,
+      rawTime: rawTimeForCalc,
+      timestamp: now.getTime(),
+      note: "",
+    };
+
+    setTimee((prevTime) => [...prevTime, newTimeObj]);
+    
+    // The useEffect will handle updating the live counter for the new split
+  }
+
+  function handleNoteChange(timestamp, newNote) {
+    setTimee((prevTime) =>
+      prevTime.map((item) =>
+        item.timestamp === timestamp ? { ...item, note: newNote } : item
+      )
     );
   }
 
   function clearLocalStorage() {
-    // Clear localStorage for this app
     localStorage.removeItem("splitTimes");
-
-    // Clear the state
     setTimee([]);
+    setLiveCounters({});
   }
 
   function displayDate() {
@@ -167,11 +168,8 @@ function App() {
       year: "numeric",
     };
 
-    // Split the formatted date
     const formattedDate = date.toLocaleDateString("en-US", options);
     const parts = formattedDate.split(", ");
-
-    // Reorder: "December 17, 2025, Wednesday"
     const reordered = `${parts[1]} ${parts[2]} ${parts[0]}`;
 
     return <p className="date">{reordered}</p>;
@@ -180,20 +178,14 @@ function App() {
   function getIsEvening() {
     const now = new Date();
     const currentHour = now.getHours();
-
     const isNightTime = currentHour >= 18 || currentHour < 4;
     setIsEvening(isNightTime);
   }
 
   function changeBackgroundColor(colorVal) {
-    // 1. Update React state
     setBgColor(colorVal);
-
-    // 2. Update DOM immediately
     document.body.style.backgroundColor = colorVal;
     document.body.style.transition = "background-color 0.3s ease";
-
-    // 3. Save to localStorage
     localStorage.setItem("appBgColor", colorVal);
   }
 
@@ -201,24 +193,17 @@ function App() {
     const savedColor = localStorage.getItem("appBgColor");
     if (savedColor) {
       document.body.style.backgroundColor = savedColor;
-      // Don't need setBgColor here because it's already set in useState initializer
     }
   }, []);
 
   useEffect(() => {
-    // Check immediately
     getIsEvening();
-
-    // Set up interval to check every minute (optional)
     const interval = setInterval(getIsEvening, 60000);
-
     return () => clearInterval(interval);
   }, []);
 
-  // Reverse the array using filter() - create a new reversed array
-  const reversedTimee = timee.filter((item, index, array) => true).reverse();
-
-  // Get current day percentage
+  // Reverse the array
+  const reversedTimee = timee.filter(() => true).reverse();
   const dayProgress = getDayPercentage();
 
   return (
@@ -253,32 +238,28 @@ function App() {
         </button>
 
         {reversedTimee.map((timeObj, index) => {
-          // Calculate day progress for THIS specific split time
           const splitDayProgress = getDayPercentage(timeObj.rawTime);
-          // Calculate time ago for this split
           const timeAgo = getTimeAgo(timeObj.timestamp);
+          
+          // Check if this is the latest split (first in reversed array)
+          const isLatest = index === 0;
+          
+          // Get the live counter value or fallback to static calculation
+          const counterText = isLatest 
+            ? (liveCounters[timeObj.timestamp] || getRemainingTime(timeObj.rawTime))
+            : getRemainingTime(timeObj.rawTime);
 
           return (
             <div key={timeObj.timestamp} className="time-div">
               <p className="thime" style={{ fontSize: "25px" }}>
-                <span
-                  style={{
-                    color: "white",
-                    // textShadow: "0 0 5px red, 0 0 10px red, 0 0 15px red",
-                  }}
-                >
+                <span style={{ color: "white" }}>
                   Split-{reversedTimee.length - index}:
                 </span>{" "}
-                <span
-                  style={{
-                    color: "white",
-                  }}
-                >
+                <span style={{ color: "white" }}>
                   {timeObj.displayTime}
                 </span>
               </p>
               
-              {/* Time ago display - Added here */}
               <p
                 style={{
                   fontSize: "14px",
@@ -291,11 +272,16 @@ function App() {
               </p>
               
               <p
-                style={{ fontSize: "20px", marginTop: "15px", color: "yellow" }}
+                style={{ 
+                  fontSize: "20px", 
+                  marginTop: "15px", 
+                  color: "yellow",
+                  transition: "all 0.1s ease"
+                }}
               >
-                {tillMidnight(timeObj.rawTime)}
+                {counterText}
               </p>
-              {/* Day Progress Display - using splitDayProgress instead of dayProgress */}
+              
               <div
                 style={{
                   margin: "15px 0",
@@ -316,7 +302,6 @@ function App() {
                   Day Progress: {splitDayProgress.formatted}
                 </p>
 
-                {/* Progress Bar */}
                 <div
                   style={{
                     width: "100%",
@@ -330,15 +315,13 @@ function App() {
                     style={{
                       width: `${splitDayProgress.percentage}%`,
                       height: "100%",
-                      background:
-                        "linear-gradient(90deg, #4c32c1ff, #3c23abff)",
+                      background: "linear-gradient(90deg, #4c32c1ff, #3c23abff)",
                       transition: "width 0.3s ease",
                       borderRadius: "5px",
                     }}
                   />
                 </div>
 
-                {/* Content Editable Note */}
                 <p
                   contentEditable
                   suppressContentEditableWarning
