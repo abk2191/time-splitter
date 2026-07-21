@@ -93,7 +93,7 @@ function App() {
     const diffMinutes = Math.floor((remainingSeconds % 3600) / 60);
     const diffSeconds = remainingSeconds % 60;
 
-    return `${diffHours} hours ${diffMinutes} minutes ${diffSeconds} seconds till midnight`;
+    return `${diffHours}h ${diffMinutes}m ${diffSeconds}s till midnight`;
   }
 
   // Function to update live counters
@@ -273,9 +273,10 @@ function App() {
               
               <p
                 style={{ 
-                  fontSize: "20px", 
+                  fontSize: "16px",  // Reduced from 20px to 16px
                   marginTop: "15px", 
-                  color: "yellow",
+                  color: "white",    // Changed from yellow to white
+                  whiteSpace: "nowrap", // Prevents line breaks
                   transition: "all 0.1s ease"
                 }}
               >
