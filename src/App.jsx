@@ -69,7 +69,7 @@ function App() {
     };
   }
 
-  // Updated function to calculate remaining time until midnight
+  // Updated function to return the counter text with red numbers
   function getRemainingTime(rawTime) {
     // Parse the input time (24-hour format)
     const [hours, minutes, seconds] = rawTime.split(":").map(Number);
@@ -93,7 +93,14 @@ function App() {
     const diffMinutes = Math.floor((remainingSeconds % 3600) / 60);
     const diffSeconds = remainingSeconds % 60;
 
-    return `${diffHours}h ${diffMinutes}m ${diffSeconds}s till midnight.`;
+    // Return with red colored numbers using span
+    return (
+      <>
+        <span style={{ color: "red" }}>{diffHours}</span>h{" "}
+        <span style={{ color: "red" }}>{diffMinutes}</span>m{" "}
+        <span style={{ color: "red" }}>{diffSeconds}</span>s till midnight.
+      </>
+    );
   }
 
   // Function to update live counters
@@ -245,7 +252,7 @@ function App() {
           const isLatest = index === 0;
           
           // Get the live counter value or fallback to static calculation
-          const counterText = isLatest 
+          const counterContent = isLatest 
             ? (liveCounters[timeObj.timestamp] || getRemainingTime(timeObj.rawTime))
             : getRemainingTime(timeObj.rawTime);
 
@@ -277,12 +284,12 @@ function App() {
                   marginTop: "15px", 
                   color: "white",
                   whiteSpace: "nowrap",
-                  textAlign: "center", // Centered text
+                  textAlign: "center",
                   transition: "all 0.1s ease"
                 }}
               >
                 <i className="fa-regular fa-hourglass" style={{ marginRight: "8px" }}></i>
-                {counterText}
+                {counterContent}
               </p>
               
               <div
