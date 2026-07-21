@@ -251,7 +251,7 @@ function App() {
 
           return (
             <div key={timeObj.timestamp} className="time-div">
-              <p className="thime" style={{ fontSize: "25px" }}>
+              <p className="thime" style={{ fontSize: "25px", textAlign: "center"}}>
                 <span style={{ color: "white" }}>
                   Split-{reversedTimee.length - index}:
                 </span>{" "}
