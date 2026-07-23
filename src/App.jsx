@@ -98,7 +98,7 @@ function App() {
       <>
         <span style={{ color: "gold" }}>{diffHours}</span>h{" "}
         <span style={{ color: "gold" }}>{diffMinutes}</span>m{" "}
-        <span style={{ color: "gold" }}>{diffSeconds}</span>s till midnight.
+        <span style={{ color: "gold" }}>{diffSeconds}</span>s till midnight.🌃
       </>
     );
   }
