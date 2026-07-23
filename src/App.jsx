@@ -93,7 +93,14 @@ function App() {
     const diffMinutes = Math.floor((remainingSeconds % 3600) / 60);
     const diffSeconds = remainingSeconds % 60;
 
-    return `${diffHours}h ${diffMinutes}m ${diffSeconds}s till midnight.`;
+    // Return with gold numbers
+    return (
+      <>
+        <span style={{ color: "gold" }}>{diffHours}</span>h{" "}
+        <span style={{ color: "gold" }}>{diffMinutes}</span>m{" "}
+        <span style={{ color: "gold" }}>{diffSeconds}</span>s till midnight.
+      </>
+    );
   }
 
   // Function to update live counters
